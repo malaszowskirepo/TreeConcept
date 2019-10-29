@@ -20,14 +20,9 @@ namespace TreeConcept.Components
             _factory = factory;
         }
 
-        
 
         public IViewComponentResult Invoke(int? errorCode)
         {
-           
-
-            bool check = SeededNodes.IsAscending;
-            System.Diagnostics.Debug.WriteLine("check: " + check);
             IOrderedEnumerable<Node> result;
             IEnumerable<Node> nodes = _dataRepository.GetAllNodes();
             if (SeededNodes.IsAscending == true)

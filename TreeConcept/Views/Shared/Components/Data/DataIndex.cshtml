@@ -1,0 +1,39 @@
+﻿@model SeededNodes
+
+@if (Model.Nodes.Where(s => s.Parent_ID == Model.Seed).Any())
+{
+    <ul>
+        @foreach (var node in Model.Nodes)
+        {
+            if (node.Parent_ID == Model.Seed)
+            {
+                SeededNodes inner = new SeededNodes { Seed = node.ID, Nodes = Model.Nodes };
+        <li>
+            @node.Name    [ id: @node.ID ]
+            <form asp-controller="Home" asp-action="AddNode" asp-route-parent="@node.ID" method="post">
+                <div class="form-group">
+                    <input asp-for="@node.Name" name="Name" placeholder="Add child" value="" />
+                    @Html.ValidationMessage("AddNodeError")
+                </div>
+                <button type="submit" class="btn btn-primary">Add Child</button>
+            </form>
+            
+            @if(node.Parent_ID != null) { 
+            <form asp-controller="Home" asp-action="DeleteNode" asp-route-parent="@node.ID" method="post">
+                <button type="submit" class="btn btn-primary">Delete Node</button>
+            </form>
+            }
+            <form asp-controller="Home" asp-action="EditNode" asp-route-id="@node.ID" method="post">
+                <div class="form-group">
+                    <input asp-for="@node.Name" name="Name" placeholder="Change name" value=""/>
+                    @Html.ValidationMessage("EditNodeError")
+                </div>
+                <button type="submit" class="btn btn-primary">Edit Node</button>
+            </form>
+
+            @Html.Partial("Components/Data/DataIndex", inner)
+        </li>
+            }
+        }
+    </ul>
+}

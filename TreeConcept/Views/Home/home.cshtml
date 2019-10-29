@@ -1,0 +1,80 @@
+﻿
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+    span.trigger {
+        cursor: pointer;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 30px;
+        font-size: 18px;
+        font-family: "Open Sans", sans-serif;
+    }
+
+        ul.list {
+            display: inline;
+        }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $(".list").each(function () {
+            $(this).find('li').each(function (index, element) {
+                if ($(element).children("ul").length) {
+                    $(element).prepend('<span class="trigger">+</span>');
+                }
+            });
+        });
+
+        $('.list > ul span.trigger').click(function () {
+            $(this).parent().children('ul').toggle();
+            if ($(this).text() == '+') {
+                $(this).text('-');
+            }
+            else {
+                $(this).text('+');
+            }
+        });
+    });
+</script>
+
+
+@if (ViewBag.Error != null)
+{
+    <ul class="list">
+        @await Component.InvokeAsync("Data", ViewBag.Error)
+    </ul>
+}
+else
+{
+    <ul class="list">
+        @await Component.InvokeAsync("Data")
+    </ul>
+}
+
+
+@model SwitchNodeViewModel
+
+
+<form asp-controller="Home" asp-action="SwitchNode" method="post">
+    <div class="form-group">
+        <input asp-for="ID1" placeholder="Enter Node1 ID"/>
+        <span asp-validation-for="ID1"></span>
+        <input asp-for="ID2" placeholder="Enter Node1 ID"/>
+        <span asp-validation-for="ID2"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Switch Node</button>
+</form>
+
+
+<form asp-controller="Home" asp-action="SwitchSortingType" method="post">
+    <p>Select ordering method:</p>
+    <label for="asc">Ascending</label>
+    <input type="radio" id="asc" name="order" value="ascending">
+    <label for="asc">Descending</label>
+    <input type="radio" id="desc" name="order" value="descending">
+    <button type="submit" class="btn btn-primary">Accept</button>
+    @Html.ValidationMessage("SwitchSortingTypeError")
+</form>
+
